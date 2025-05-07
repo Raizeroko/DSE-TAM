@@ -82,20 +82,13 @@ def train_and_validation(net, train_iter, test_iter, num_epochs, lr, weight_deca
         val_loss, val_acc, cm = evaluate_model(net, test_iter, lossFunction, device)
         print(f'Validation Epoch [{epoch + 1}/{num_epochs}], Loss: {val_loss:.4f}, Accuracy: {val_acc:.4f}')
 
-
-
         train_losses.append(epoch_loss)
         val_losses.append(val_loss)
         val_accs.append(val_acc)
         val_cm.append(cm)
 
-        if val_acc >= max_acc:
-            max_acc = val_acc
-            state = net.state_dict()
-
-
     val_cm = np.array(val_cm)
-    return train_losses, val_losses, val_accs, val_cm, state
+    return train_losses, val_losses, val_accs, val_cm
 
 
 def train_by_LOSO(params):
@@ -127,15 +120,13 @@ def train_by_LOSO(params):
 
         print("============================================================================")
         print(f"Subject: {i}")
-        train_losses, val_losses, val_accs, val_cm, state = train_and_validation(net,
-                                                                                  loader_train,
-                                                                                  loader_test,
-                                                                                  num_epochs=params['epoch'],
-                                                                                  lr=params['lr'],
-                                                                                  weight_decay=params['weight_decay'],
-                                                                                  device=params['device'])
-
-        torch.save(state, f"./checkpoints/{params['val']}/{params['dataset']}/{params['net']}-{params['session']}-s{i}.pth")
+        train_losses, val_losses, val_accs, val_cm= train_and_validation(net,
+                                                                          loader_train,
+                                                                          loader_test,
+                                                                          num_epochs=params['epoch'],
+                                                                          lr=params['lr'],
+                                                                          weight_decay=params['weight_decay'],
+                                                                          device=params['device'])
 
         sub_train_loss.append(train_losses)
         sub_val_loss.append(val_losses)
@@ -199,15 +190,13 @@ def train_by_KFold(params):
             )
             print("============================================================================")
             print(f"Subject: {i}   Fold: {fold}")
-            train_losses, val_losses, val_accs, val_cm, state = train_and_validation(net,
+            train_losses, val_losses, val_accs, val_cm = train_and_validation(net,
                                                                                   loader_train,
                                                                                   loader_test,
                                                                                   num_epochs=params['epoch'],
                                                                                   lr=params['lr'],
                                                                                   weight_decay=params['weight_decay'],
                                                                                   device=params['device'])
-
-            torch.save(state, f"./checkpoints/{params['val']}/{params['dataset']}/{params['net']}-{params['session']}-s{i}-f{fold}.pth")
 
             fold_train_loss.append(train_losses)
             fold_val_loss.append(val_losses)
@@ -242,7 +231,7 @@ params = {
         # -----------网络参数-------------------------------------------------------
         'emb_dim': 48,  # embedding dimension of Embedding, Self-Attention, Mamba
         'emb_kernel': 4,  # 2D-conv embedding length of Embedding
-        'pool': 4,
+        'pool': 4,  # pool kernel size
         'd_state': 16,  # d_state of Mamba2
         'd_conv': 4,  # d_conv of Mamba2
         'expand': 8,  # expand of Mamba2
@@ -255,14 +244,14 @@ params = {
         'weight_decay': 1e-6,  # L2-norm
         'time': 384,  # window size of EEG
         # -----------训练参数-------------------------------------------------------
-        'seed': 20,
+        'seed': 20, # random seed
         'epoch': 500,  # training epoch
         'batch_size': 256,  # training batch size
-        'session': 1,  # dataset session: 1/2/3 (SEED:session1/2/3,SEEDIV:session1/2/3, DEAP:Arousal/Valence/Dominance)
-        'val': "KFold",  # experiment validation：W. S/WSSS/LOSO/KFold
+        'session': 1,  # dataset session: 1/2 (DEAP:Arousal/Valence, DREAMER:Arousal/Valence, CEED)
+        'val': "KFold",  # experiment validation：LOSO/KFold
         'shuffle': 'Trial',  # validation shuffle way: Sample/Trial
-        'net': "DSE-TAM",  # Choose net：ACRNN/Mamba
-        'dataset': 'DEAP',  # choose dataset: DEAP/DREAMER/SEED/SEEDIV
+        'net': "DSE-TAM",  # Choose net：ACRNN/DSE-TAM/Conformer/Deformer/DGCNN/LGGNet/TSception
+        'dataset': 'DEAP',  # choose dataset: DEAP/DREAMER/CEED
         'feature': "Time",  # input feature: Time/DE
 }
 
