@@ -235,7 +235,6 @@ params = {
         'd_state': 16,  # d_state of Mamba2
         'd_conv': 4,  # d_conv of Mamba2
         'expand': 8,  # expand of Mamba2
-        'headdim': 8,  # headdim of Mamba2
         'num_layers': 2,  # layer of MambaFormer
         'num_heads': 8,  # num head of Self-Attention
         'g_layers': 4,  # graph embedding layers

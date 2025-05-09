@@ -248,8 +248,8 @@ class DSE_TAM(nn.Module):
 
         self.dse = DSE(self.num_elec, self.emb_dim, self.pool, self.emb_kernel, self.time, self.g_layers)
         self.pre_stm = STM(self.emb_dim, self.d_state, self.d_conv, self.expand, self.dropout)
-        self.tam = TAM(self.emb_dim, self.d_state, self.d_conv, self.expand, self.headdim,
-                                       self.n_layers, num_heads=self.n_heads, dropout=self.dropout)
+        self.tam = TAM(self.emb_dim, self.d_state, self.d_conv, self.expand,
+                                       self.n_layers, self.n_heads, dropout=self.dropout)
 
         self.classifier = nn.Sequential(
             nn.Linear(self.emb_dim, self.n_cls),
