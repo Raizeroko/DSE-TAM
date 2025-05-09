@@ -1,5 +1,5 @@
 from einops.layers.torch import Rearrange
-from mamba_ssm import Mamba2
+from mamba_ssm import Mamba
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -135,9 +135,9 @@ class DSE(nn.Module):
 
 
 class STM(nn.Module):
-    def __init__(self, emb_dim, d_state, d_conv, expand, headdim, dropout=0.5):
+    def __init__(self, emb_dim, d_state, d_conv, expand, dropout=0.5):
         super(STM, self).__init__()
-        self.mamba = Mamba2(d_model=emb_dim, d_state=d_state, d_conv=d_conv, expand=expand, headdim=headdim)
+        self.mamba = Mamba(d_model=emb_dim, d_state=d_state, d_conv=d_conv, expand=expand)
         # 层归一化
         self.norm1 = nn.LayerNorm(emb_dim)
         self.dropout = nn.Dropout(dropout)
@@ -212,13 +212,13 @@ class STA(nn.Module):
 
 
 class TAM(nn.Module):
-    def __init__(self, emb_dim, d_state, d_conv, expand, headdim, num_layers, num_heads=8, dropout=0.5):
+    def __init__(self, emb_dim, d_state, d_conv, expand, num_layers, num_heads=8, dropout=0.5):
         super(TAM, self).__init__()
         self.layers = nn.ModuleList()
         for _ in range(num_layers):
             self.layers.append(nn.ModuleList([
                 STA(emb_dim, num_heads, dropout),
-                STM(emb_dim, d_state, d_conv, expand, headdim, dropout)
+                STM(emb_dim, d_state, d_conv, expand, dropout)
             ]))
         self.dropout = nn.Dropout(dropout)
 
@@ -247,7 +247,7 @@ class DSE_TAM(nn.Module):
         self.g_layers = params['g_layers']
 
         self.dse = DSE(self.num_elec, self.emb_dim, self.pool, self.emb_kernel, self.time, self.g_layers)
-        self.pre_stm = STM(self.emb_dim, self.d_state, self.d_conv, self.expand, self.headdim, self.dropout)
+        self.pre_stm = STM(self.emb_dim, self.d_state, self.d_conv, self.expand, self.dropout)
         self.tam = TAM(self.emb_dim, self.d_state, self.d_conv, self.expand, self.headdim,
                                        self.n_layers, num_heads=self.n_heads, dropout=self.dropout)
 
