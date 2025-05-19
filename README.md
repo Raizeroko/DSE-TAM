@@ -21,7 +21,7 @@ All models were trained and tested by a single GPU, Nvidia GeForce RTX 3090 ([Dr
 These models compared with DES-TAM and unitized in the source code are listed below.
 
 - [DGCNN](https://github.com/xujiayang530/DGCNN)
-- [ACRNN](https://github.com/yi-ding-cs/LGG)
+- [ACRNN](https://github.com/AstoncPou/ACRNN)
 - [TSception](https://github.com/yi-ding-cs/TSception)
 - [Deformer](https://github.com/yi-ding-cs/EEG-Deformer)
 - [LGGNet](https://github.com/yi-ding-cs/LGG)
@@ -37,7 +37,7 @@ Prepare dataset：
 
 ## Acknowledgement
 
-Some of the source code of is originally from [IJCNN](https://github.com/ynulonger/ijcnn), [PR-PL](https://github.com/KAZABANA/PR-PL). We appreciate the authors for their contribution.
+Some of the source code of is originally from [IJCNN](https://github.com/ynulonger/ijcnn), [PR-PL](https://github.com/KAZABANA/PR-PL), [ACRNN(pytorch)](https://github.com/nayuta-ai/ACRNN_EEG). We appreciate the authors for their contribution.
 
 ## Citation
 
