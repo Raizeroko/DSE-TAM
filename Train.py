@@ -232,10 +232,10 @@ params = {
         'emb_dim': 48,  # embedding dimension of Embedding, Self-Attention, Mamba
         'emb_kernel': 4,  # 2D-conv embedding length of Embedding
         'pool': 4,  # pool kernel size
-        'd_state': 16,  # d_state of Mamba2
-        'd_conv': 4,  # d_conv of Mamba2
-        'expand': 8,  # expand of Mamba2
-        'num_layers': 2,  # layer of MambaFormer
+        'd_state': 16,  # d_state of Mamba
+        'd_conv': 4,  # d_conv of Mamba
+        'expand': 8,  # expand of Mamba
+        'num_layers': 2,  # layer of TAM
         'num_heads': 8,  # num head of Self-Attention
         'g_layers': 4,  # graph embedding layers
         'dropout': 0.5,  # dropout of Embedding, Self-Attention, Mamba
